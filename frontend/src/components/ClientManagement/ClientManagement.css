@@ -1,0 +1,171 @@
+.client-management-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.client-management-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 250px;
+}
+
+.clients-list h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.clients-table th,
+.clients-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.clients-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.client-type {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.client-type.preferential {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.client-type.regular {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.status.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.error-message {
+  color: #721c24;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .filters {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .search-input {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .client-management-container {
+    padding: 1rem;
+  }
+
+  .clients-table {
+    font-size: 0.85rem;
+  }
+
+  /* Hacer la tabla scrolleable en móvil */
+  .clients-list {
+    overflow-x: auto;
+  }
+
+  .clients-table {
+    min-width: 600px; /* evita que se rompa */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Mostrar cada fila como card en pantallas muy pequeñas */
+  .clients-table,
+  .clients-table thead,
+  .clients-table tbody,
+  .clients-table th,
+  .clients-table td,
+  .clients-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .clients-table thead {
+    display: none; /* ocultamos los headers */
+  }
+
+  .clients-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.75rem;
+    background: #fff;
+  }
+
+  .clients-table td {
+    border: none;
+    padding: 0.5rem 0;
+    text-align: left;
+    position: relative;
+  }
+
+  .clients-table td::before {
+    content: attr(data-label); /* se agrega nombre de la columna */
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.2rem;
+    color: #555;
+  }
+}
