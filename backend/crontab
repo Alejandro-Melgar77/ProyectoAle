@@ -1,0 +1,2 @@
+# Ejecutar backup cada domingo a las 00:00
+0 0 * * 0 cd /usr/src/app && python manage.py backup_weekly >> /var/log/cron.log 2>&1

@@ -51,6 +51,28 @@ services:
      
 
   # --------------------
+  # Servicio de Cron para backups
+  # --------------------
+  cron:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: django_cron
+    command: crond -f -l 2
+    volumes:
+      - ./backend:/usr/src/app
+    environment:
+      - TZ=America/La_Paz
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+      - backend
+
+  # --------------------
   # Servicio de Frontend: React (Servido por Nginx)
   # --------------------
   frontend:

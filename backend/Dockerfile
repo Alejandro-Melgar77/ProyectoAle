@@ -19,6 +19,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia el código fuente del proyecto
 COPY . .
 
+# Configurar cron
+RUN chmod 0644 crontab
+RUN crontab crontab
+RUN touch /var/log/cron.log
+
 # Expone el puerto por defecto de Django
 EXPOSE 8000
 
