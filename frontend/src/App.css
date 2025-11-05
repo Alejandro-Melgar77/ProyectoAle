@@ -1,15 +1,31 @@
 /* =========================
-   Estado global del sidebar
-   — Anchos + timing compartido
+   Variables de tema
    ========================= */
 :root {
-  --sidebar-w: 240px;                 /* ancho expandido */
-  --sidebar-w-collapsed: 64px;        /* ancho colapsado (iconos) */
-  --sidebar-current-w: var(--sidebar-w); /* valor dinámico actual */
-
-  /* ⏱️ Duración/easing para animaciones coordinadas (sidebar + header) */
+  /* Variables del sidebar existentes */
+  --sidebar-w: 240px;
+  --sidebar-w-collapsed: 64px;
+  --sidebar-current-w: var(--sidebar-w);
   --sidebar-dur: 240ms;
   --sidebar-ease: ease;
+
+  /* Variables del tema claro (default) */
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #ffffff;
+  --header-bg: #282c34;
+  --text-primary: #000000;
+  --text-secondary: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Tema oscuro */
+[data-theme='dark'] {
+  --bg-primary: #121212;
+  --bg-secondary: #282c34;
+  --header-bg: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 /* El Sidebar (desde JS) setea este atributo en <html>:
@@ -18,9 +34,7 @@
 :root[data-sidebar="expanded"]  { --sidebar-current-w: var(--sidebar-w); }
 :root[data-sidebar="collapsed"] { --sidebar-current-w: var(--sidebar-w-collapsed); }
 
-/* =========================
-   Reset y base
-   ========================= */
+/* Reset y base */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
@@ -29,7 +43,9 @@ body {
                sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .App {
@@ -44,12 +60,12 @@ body {
    — Transiciona al mismo ritmo que el sidebar
    ========================= */
 .App-header {
-  background-color: #282c34;
-  color: white;
+  background-color: var(--header-bg);
+  color: var(--text-secondary);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
 
   /* Altura y padding horizontal del header */
   height: 64px;
@@ -68,7 +84,9 @@ body {
   /* 🎯 Transiciones sincronizadas con el sidebar */
   transition:
     margin-left var(--sidebar-dur) var(--sidebar-ease),
-    width       var(--sidebar-dur) var(--sidebar-ease);
+    width       var(--sidebar-dur) var(--sidebar-ease),
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .App-header h1 {
@@ -110,11 +128,12 @@ body {
    FOOTER (sin cambios)
    ========================= */
 .App-footer {
-  background-color: #282c34;
+  background-color: var(--header-bg);
   padding: 1rem;
-  color: white;
+  color: var(--text-secondary);
   text-align: center;
   margin-top: auto;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Pantalla de carga (sin cambios) */

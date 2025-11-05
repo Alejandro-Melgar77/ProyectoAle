@@ -6,7 +6,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
+import { ThemeProvider } from "./context/ThemeContext";
 import api from "./config/axios";
 
 // Layouts
@@ -84,208 +84,210 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        {/* Root -> Dashboard (protegido) */}
-        <Route
-          path="/"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </RequireAuth>
-          }
-        />
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          {/* Root -> Dashboard (protegido) */}
+          <Route
+            path="/"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+              </RequireAuth>
+            }
+          />
 
-        {/* Públicas */}
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/" replace />
-            ) : (
-              <AuthLayout>
-                <Login onLoginSuccess={handleLoginSuccess} />
-              </AuthLayout>
-            )
-          }
-        />
-        <Route
-          path="/password-reset"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/" replace />
-            ) : (
-              <AuthLayout>
-                <PasswordReset />
-              </AuthLayout>
-            )
-          }
-        />
+          {/* Públicas */}
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <AuthLayout>
+                  <Login onLoginSuccess={handleLoginSuccess} />
+                </AuthLayout>
+              )
+            }
+          />
+          <Route
+            path="/password-reset"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <AuthLayout>
+                  <PasswordReset />
+                </AuthLayout>
+              )
+            }
+          />
 
-        {/* Gestión (protegidas) */}
-        <Route
-          path="/users"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <UserManagement />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/roles"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <RoleManagement />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/clientes"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <ClientManagement />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/empleados"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <EmployeeManagement />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/vista-empresas"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <EmpresaManagement />
-              </Layout>
-            </RequireAuth>
-          }
-        />
+          {/* Gestión (protegidas) */}
+          <Route
+            path="/users"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <UserManagement />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/roles"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <RoleManagement />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/clientes"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <ClientManagement />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/empleados"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <EmployeeManagement />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/vista-empresas"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <EmpresaManagement />
+                </Layout>
+              </RequireAuth>
+            }
+          />
 
-        {/* Simulador (protegido) */}
-        <Route
-          path="/simulador"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <Simulador />
-              </Layout>
-            </RequireAuth>
-          }
-        />
+          {/* Simulador (protegido) */}
+          <Route
+            path="/simulador"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <Simulador />
+                </Layout>
+              </RequireAuth>
+            }
+          />
 
-        {/* Solicitudes (protegidas) */}
-        <Route
-          path="/solicitudes"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <SolicitudesList />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/solicitudes/nueva"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <SolicitudCreate />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/solicitudes/:id"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <SolicitudDetail />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/solicitudes/:id/checklist"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <SolicitudChecklist />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/solicitudes/:id/plan"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <PlanView />
-              </Layout>
-            </RequireAuth>
-          }
-        />
+          {/* Solicitudes (protegidas) */}
+          <Route
+            path="/solicitudes"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <SolicitudesList />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/solicitudes/nueva"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <SolicitudCreate />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/solicitudes/:id"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <SolicitudDetail />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/solicitudes/:id/checklist"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <SolicitudChecklist />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/solicitudes/:id/plan"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <PlanView />
+                </Layout>
+              </RequireAuth>
+            }
+          />
 
-        {/* Editor de requisitos (protegido) */}
-        <Route
-          path="/productos/requisitos"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <RequisitosEditor />
-              </Layout>
-            </RequireAuth>
-          }
-        />
+          {/* Editor de requisitos (protegido) */}
+          <Route
+            path="/productos/requisitos"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <RequisitosEditor />
+                </Layout>
+              </RequireAuth>
+            }
+          />
 
-        {/* Bitácora (protegida) */}
-        <Route
-          path="/bitacora"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <BitacoraPage />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/validacion/:solicitudId"
-          element={
-            <RequireAuth authed={isAuthenticated} loading={authLoading}>
-              <Layout>
-                <InformationValidation />
-              </Layout>
-            </RequireAuth>
-          }
-        />
-        {/* 404 -> Dashboard o Login según estado */}
-        <Route
-          path="*"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-      </Routes>
-    </Router>
+          {/* Bitácora (protegida) */}
+          <Route
+            path="/bitacora"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <BitacoraPage />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/validacion/:solicitudId"
+            element={
+              <RequireAuth authed={isAuthenticated} loading={authLoading}>
+                <Layout>
+                  <InformationValidation />
+                </Layout>
+              </RequireAuth>
+            }
+          />
+          {/* 404 -> Dashboard o Login según estado */}
+          <Route
+            path="*"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
 
