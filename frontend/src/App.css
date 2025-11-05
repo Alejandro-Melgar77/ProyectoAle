@@ -1,14 +1,32 @@
-/* src/App.css */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* =========================
+   Estado global del sidebar
+   — Anchos + timing compartido
+   ========================= */
+:root {
+  --sidebar-w: 240px;                 /* ancho expandido */
+  --sidebar-w-collapsed: 64px;        /* ancho colapsado (iconos) */
+  --sidebar-current-w: var(--sidebar-w); /* valor dinámico actual */
+
+  /* ⏱️ Duración/easing para animaciones coordinadas (sidebar + header) */
+  --sidebar-dur: 240ms;
+  --sidebar-ease: ease;
 }
+
+/* El Sidebar (desde JS) setea este atributo en <html>:
+   data-sidebar="expanded|collapsed".
+   Con eso actualizamos --sidebar-current-w y el header se ajusta solo. */
+:root[data-sidebar="expanded"]  { --sidebar-current-w: var(--sidebar-w); }
+:root[data-sidebar="collapsed"] { --sidebar-current-w: var(--sidebar-w-collapsed); }
+
+/* =========================
+   Reset y base
+   ========================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+               'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+               sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5f5f5;
@@ -20,26 +38,65 @@ body {
   flex-direction: column;
 }
 
+/* =========================
+   HEADER
+   — Se alinea según --sidebar-current-w
+   — Transiciona al mismo ritmo que el sidebar
+   ========================= */
 .App-header {
   background-color: #282c34;
-  padding: 1rem;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Altura y padding horizontal del header */
+  height: 64px;
+  padding: 0 16px;
+
+  /* 💡 Alinear con el borde derecho del sidebar (sin meterse debajo) */
+  margin-left: var(--sidebar-current-w);
+  width: calc(100% - var(--sidebar-current-w));
+
+  /* Mantenerse arriba mientras se hace scroll */
+  position: sticky;    /* (puedes cambiar a fixed si te gusta más) */
+  top: 0;
+  z-index: 900;
+  box-sizing: border-box;
+
+  /* 🎯 Transiciones sincronizadas con el sidebar */
+  transition:
+    margin-left var(--sidebar-dur) var(--sidebar-ease),
+    width       var(--sidebar-dur) var(--sidebar-ease);
 }
 
 .App-header h1 {
   font-size: 1.5rem;
   font-weight: 600;
+  white-space: nowrap;     /* no partir palabras raramente */
+  overflow: hidden;        /* si falta espacio, cortar de forma elegante */
+  text-overflow: ellipsis; /* … */
 }
 
+/* =========================
+   MAIN
+   — Empuja el contenido para que no quede bajo el header
+   ========================= */
+.App-main { 
+  /* 64px de header + un poco de aire visual */
+  padding-top: 80px;
+}
+
+/* Botonera en header (si la usas) */
 .header-actions {
   display: flex;
   align-items: center;
 }
 
+/* (Tu versión comentada del main completo queda igual; no la toco)
+   Si en algún momento quieres limitar ancho y paddings, descomenta. */
+/*
 .App-main {
   flex: 1;
   padding: 2rem;
@@ -47,7 +104,11 @@ body {
   margin: 0 auto;
   width: 100%;
 }
+*/
 
+/* =========================
+   FOOTER (sin cambios)
+   ========================= */
 .App-footer {
   background-color: #282c34;
   padding: 1rem;
@@ -56,6 +117,7 @@ body {
   margin-top: auto;
 }
 
+/* Pantalla de carga (sin cambios) */
 .loading {
   display: flex;
   justify-content: center;
@@ -64,15 +126,14 @@ body {
   font-size: 1.2rem;
 }
 
-/* Estilos responsivos */
-@media (max-width: 768px) {
+/* =========================
+   Responsive
+   — Si en móvil tu sidebar actúa como “drawer”, puedes
+     respetar 64px (iconos) o ponerlo a 0 para centrar del todo.
+   ========================= */
+@media (max-width: 900px) {
   .App-header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .App-main {
-    padding: 1rem;
+    margin-left: var(--sidebar-w-collapsed);           /* o 0 si prefieres */
+    width: calc(100% - var(--sidebar-w-collapsed));    /* o 100% si pones 0 */
   }
 }

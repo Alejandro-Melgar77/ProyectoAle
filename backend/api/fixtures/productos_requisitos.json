@@ -1,0 +1,76 @@
+[
+  {"model":"api.productofinanciero","pk":1,"fields":{
+    "codigo":"PERSONAL_STD","nombre":"Crédito Personal Estándar","tipo":"PERSONAL",
+    "tasa_nominal_anual_min":"9.9900","tasa_nominal_anual_max":"18.9900",
+    "plazo_min":6,"plazo_max":84,"monto_min":"1000.00","monto_max":"150000.00",
+    "metodo_amortizacion_default":"frances","activo":true
+  }},
+  {"model":"api.productofinanciero","pk":2,"fields":{
+    "codigo":"VEHICULAR_STD","nombre":"Crédito Vehicular","tipo":"VEHICULAR",
+    "tasa_nominal_anual_min":"8.9900","tasa_nominal_anual_max":"16.9900",
+    "plazo_min":12,"plazo_max":72,"monto_min":"5000.00","monto_max":"300000.00",
+    "metodo_amortizacion_default":"frances","activo":true
+  }},
+  {"model":"api.productofinanciero","pk":3,"fields":{
+    "codigo":"HIPOTECARIO_VIV","nombre":"Hipotecario Vivienda","tipo":"HIPOTECARIO",
+    "tasa_nominal_anual_min":"6.9900","tasa_nominal_anual_max":"14.9900",
+    "plazo_min":36,"plazo_max":360,"monto_min":"20000.00","monto_max":"1000000.00",
+    "metodo_amortizacion_default":"frances","activo":true
+  }},
+  {"model":"api.productofinanciero","pk":4,"fields":{
+    "codigo":"PYME_STD","nombre":"Crédito MYPE","tipo":"PYME",
+    "tasa_nominal_anual_min":"10.9900","tasa_nominal_anual_max":"22.9900",
+    "plazo_min":6,"plazo_max":120,"monto_min":"3000.00","monto_max":"500000.00",
+    "metodo_amortizacion_default":"frances","activo":true
+  }},
+
+  {"model":"api.documentotipo","pk":1,"fields":{"codigo":"CI","nombre":"Cédula de Identidad","vigencia_dias":null}},
+  {"model":"api.documentotipo","pk":2,"fields":{"codigo":"DOMICILIO","nombre":"Comprobante de Domicilio","vigencia_dias":90}},
+  {"model":"api.documentotipo","pk":3,"fields":{"codigo":"BOLETAS_3M","nombre":"Boletas de Pago (3 meses)","vigencia_dias":120}},
+  {"model":"api.documentotipo","pk":4,"fields":{"codigo":"AFP_1M","nombre":"Extracto AFP (1 mes)","vigencia_dias":60}},
+  {"model":"api.documentotipo","pk":5,"fields":{"codigo":"EXTRACTOS_6M","nombre":"Extractos bancarios (6 meses)","vigencia_dias":60}},
+  {"model":"api.documentotipo","pk":6,"fields":{"codigo":"CERT_TRABAJO","nombre":"Certificado de Trabajo","vigencia_dias":60}},
+  {"model":"api.documentotipo","pk":7,"fields":{"codigo":"PROFORMA_VEH","nombre":"Proforma Vehículo","vigencia_dias":60}},
+  {"model":"api.documentotipo","pk":8,"fields":{"codigo":"FOLIO_REAL","nombre":"Folio Real actualizado","vigencia_dias":30}},
+  {"model":"api.documentotipo","pk":9,"fields":{"codigo":"GRAVAMEN","nombre":"Certificado de Gravámenes/Alodial","vigencia_dias":30}},
+  {"model":"api.documentotipo","pk":10,"fields":{"codigo":"AVALUO","nombre":"Avalúo inmueble","vigencia_dias":180}},
+  {"model":"api.documentotipo","pk":11,"fields":{"codigo":"NIT","nombre":"Número de Identificación Tributaria","vigencia_dias":null}},
+  {"model":"api.documentotipo","pk":12,"fields":{"codigo":"IVA_6M","nombre":"Declaraciones IVA (6 meses)","vigencia_dias":60}},
+
+  {"model":"api.requisitoproductodocumento","pk":101,"fields":{"producto":1,"tipo_trabajador":"PRIVADO","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":102,"fields":{"producto":1,"tipo_trabajador":"PRIVADO","documento":2,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":103,"fields":{"producto":1,"tipo_trabajador":"PRIVADO","documento":3,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":104,"fields":{"producto":1,"tipo_trabajador":"PRIVADO","documento":4,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":105,"fields":{"producto":1,"tipo_trabajador":"PRIVADO","documento":6,"obligatorio":false}},
+
+  {"model":"api.requisitoproductodocumento","pk":111,"fields":{"producto":1,"tipo_trabajador":"PUBLICO","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":112,"fields":{"producto":1,"tipo_trabajador":"PUBLICO","documento":2,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":113,"fields":{"producto":1,"tipo_trabajador":"PUBLICO","documento":3,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":114,"fields":{"producto":1,"tipo_trabajador":"PUBLICO","documento":4,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":115,"fields":{"producto":1,"tipo_trabajador":"PUBLICO","documento":6,"obligatorio":false}},
+
+  {"model":"api.requisitoproductodocumento","pk":121,"fields":{"producto":1,"tipo_trabajador":"INDEPENDIENTE","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":122,"fields":{"producto":1,"tipo_trabajador":"INDEPENDIENTE","documento":2,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":123,"fields":{"producto":1,"tipo_trabajador":"INDEPENDIENTE","documento":11,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":124,"fields":{"producto":1,"tipo_trabajador":"INDEPENDIENTE","documento":12,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":125,"fields":{"producto":1,"tipo_trabajador":"INDEPENDIENTE","documento":5,"obligatorio":true}},
+
+  {"model":"api.requisitoproductodocumento","pk":201,"fields":{"producto":2,"tipo_trabajador":"PRIVADO","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":202,"fields":{"producto":2,"tipo_trabajador":"PRIVADO","documento":2,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":203,"fields":{"producto":2,"tipo_trabajador":"PRIVADO","documento":3,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":204,"fields":{"producto":2,"tipo_trabajador":"PRIVADO","documento":4,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":205,"fields":{"producto":2,"tipo_trabajador":"PRIVADO","documento":7,"obligatorio":true}},
+
+  {"model":"api.requisitoproductodocumento","pk":301,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":302,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":2,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":303,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":3,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":304,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":4,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":305,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":8,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":306,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":9,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":307,"fields":{"producto":3,"tipo_trabajador":"PRIVADO","documento":10,"obligatorio":true}},
+
+  {"model":"api.requisitoproductodocumento","pk":401,"fields":{"producto":4,"tipo_trabajador":"INDEPENDIENTE","documento":1,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":402,"fields":{"producto":4,"tipo_trabajador":"INDEPENDIENTE","documento":11,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":403,"fields":{"producto":4,"tipo_trabajador":"INDEPENDIENTE","documento":12,"obligatorio":true}},
+  {"model":"api.requisitoproductodocumento","pk":404,"fields":{"producto":4,"tipo_trabajador":"INDEPENDIENTE","documento":5,"obligatorio":true}}
+]

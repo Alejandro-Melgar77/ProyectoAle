@@ -1,0 +1,23 @@
+/* Reserva espacio a la izquierda según el ancho del sidebar. 
+   Usamos padding para que el main no quede debajo del aside. */
+
+
+   .app-main {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding-left: 240px;
+  transition: padding-left .2s ease;
+}
+
+/* Cuando el sidebar se colapsa (width:64), queremos 64 de padding. 
+   Usamos el selector del aside como ancestro fijo en la página. */
+.sidebar.collapsed + .app-main,
+.sidebar.collapsed ~ .app-main {
+  padding-left: 64px;
+}
+
+.app-main__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}

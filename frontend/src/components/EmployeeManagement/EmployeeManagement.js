@@ -1,165 +1,136 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// src/components/EmployeeManagement/EmployeeManagement.js
+import React, { useEffect, useMemo, useState } from 'react';
+import api from '../../api/http';
 import './EmployeeManagement.css';
 
-const EmployeeManagement = () => {
-  const [employees, setEmployees] = useState([]);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+export default function EmployeeManagement() {
+  const [rows, setRows] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+
   const [filters, setFilters] = useState({
-    search: '',
+    q: '',
     departamento: '',
-    puede_aprobar: ''
+    puede_aprobar: '',
   });
 
   useEffect(() => {
-    fetchEmployees();
+    const load = async () => {
+      setBusy(true); setErr('');
+      try {
+        const { data } = await api.get('/users/');
+        const onlyEmployees = (Array.isArray(data) ? data : data?.results || [])
+          .filter(u => !!u.empleado_info);
+        setRows(onlyEmployees);
+      } catch (e) {
+        console.error('Fetch employees error:', e);
+        setErr('Error al cargar los empleados');
+        setRows([]);
+      } finally {
+        setBusy(false);
+      }
+    };
+    load();
   }, []);
 
-  const fetchEmployees = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get('http://localhost:8000/api/users/empleados/');
-      setEmployees(response.data.results || response.data);
-    } catch (error) {
-      setError('Error al cargar los empleados');
-      console.error('Fetch employees error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const filtered = useMemo(() => {
+    const q = filters.q.toLowerCase().trim();
+    return rows.filter(u => {
+      const ei = u.empleado_info || {};
+      const ui = ei.user_info || u;
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters({
-      ...filters,
-      [name]: value
+      const matchQ =
+        ui.username?.toLowerCase().includes(q) ||
+        ui.first_name?.toLowerCase().includes(q) ||
+        ui.last_name?.toLowerCase().includes(q) ||
+        ei.codigo_empleado?.toLowerCase().includes(q);
+
+      const matchDep = !filters.departamento || ei.departamento === filters.departamento;
+
+      const matchApr =
+        filters.puede_aprobar === '' ||
+        (filters.puede_aprobar === 'true' && ei.puede_aprobar_creditos) ||
+        (filters.puede_aprobar === 'false' && !ei.puede_aprobar_creditos);
+
+      return matchQ && matchDep && matchApr;
     });
-  };
+  }, [rows, filters]);
 
-  const filteredEmployees = employees.filter(employee => {
-    // Fallback a los datos de usuario si no hay registro en Empleado
-    const userInfo = employee.empleado_info?.user_info || {
-      username: employee.username,
-      first_name: employee.first_name,
-      last_name: employee.last_name,
-      email: employee.email,
-      is_active: employee.is_active
-    };
-    const empInfo = employee.empleado_info || {};
-
-    const matchesSearch =
-      userInfo.username?.toLowerCase().includes(filters.search.toLowerCase()) ||
-      userInfo.first_name?.toLowerCase().includes(filters.search.toLowerCase()) ||
-      userInfo.last_name?.toLowerCase().includes(filters.search.toLowerCase()) ||
-      empInfo.codigo_empleado?.includes(filters.search);
-
-    const matchesDepartamento =
-      !filters.departamento || empInfo.departamento === filters.departamento;
-
-    const matchesPuedeAprobar =
-      filters.puede_aprobar === '' ||
-      (filters.puede_aprobar === 'true' && empInfo.puede_aprobar_creditos) ||
-      (filters.puede_aprobar === 'false' && !empInfo.puede_aprobar_creditos);
-
-    return matchesSearch && matchesDepartamento && matchesPuedeAprobar;
-  });
-
-  if (isLoading) {
-    return <div className="loading">Cargando empleados...</div>;
-  }
+  if (busy) return <div className="loading">Cargando empleados…</div>;
 
   return (
     <div className="employee-management-container">
       <h2>Gestión de Personal</h2>
 
-      {error && <div className="error-message">{error}</div>}
+      {err && <div className="error-message">{err}</div>}
 
       <div className="filters">
         <input
           type="text"
-          name="search"
+          name="q"
           placeholder="Buscar por nombre, usuario o código"
-          value={filters.search}
-          onChange={handleFilterChange}
+          value={filters.q}
+          onChange={(e) => setFilters({ ...filters, q: e.target.value })}
           className="search-input"
         />
-
-        <select name="departamento" value={filters.departamento} onChange={handleFilterChange}>
+        <select
+          name="departamento"
+          value={filters.departamento}
+          onChange={(e) => setFilters({ ...filters, departamento: e.target.value })}
+        >
           <option value="">Todos los departamentos</option>
           <option value="CREDITO">Crédito</option>
           <option value="ADMIN">Administración</option>
           <option value="TESORERIA">Tesorería</option>
           <option value="ATENCION">Atención al Cliente</option>
         </select>
-
-        <select name="puede_aprobar" value={filters.puede_aprobar} onChange={handleFilterChange}>
-          <option value="">Todos los empleados</option>
-          <option value="true">Puede aprobar créditos</option>
-          <option value="false">No puede aprobar créditos</option>
+        <select
+          name="puede_aprobar"
+          value={filters.puede_aprobar}
+          onChange={(e) => setFilters({ ...filters, puede_aprobar: e.target.value })}
+        >
+          <option value="">Todos</option>
+          <option value="true">Puede aprobar</option>
+          <option value="false">No puede aprobar</option>
         </select>
       </div>
 
       <div className="employees-list">
         <h3>Lista de Empleados</h3>
-
-        {filteredEmployees.length === 0 ? (
-          <p>No hay empleados registrados</p>
+        {filtered.length === 0 ? (
+          <p>No hay empleados registrados.</p>
         ) : (
           <table className="employees-table">
             <thead>
               <tr>
                 <th>Código</th>
                 <th>Usuario</th>
-                <th>Nombre Completo</th>
+                <th>Nombre</th>
                 <th>Email</th>
                 <th>Departamento</th>
                 <th>Salario</th>
                 <th>Supervisor</th>
                 <th>Aprobar Créditos</th>
-                <th>Límite Aprobación</th>
+                <th>Límite</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
-              {filteredEmployees.map(employee => {
-                const userInfo = employee.empleado_info?.user_info || {
-                  username: employee.username,
-                  first_name: employee.first_name,
-                  last_name: employee.last_name,
-                  email: employee.email,
-                  is_active: employee.is_active
-                };
-                const empInfo = employee.empleado_info || {};
-
+              {filtered.map(u => {
+                const ei = u.empleado_info || {};
+                const ui = ei.user_info || u;
                 return (
-                  <tr key={employee.id}>
-                    <td>{empInfo.codigo_empleado || '-'}</td>
-                    <td>{userInfo.username}</td>
-                    <td>{`${userInfo.first_name || ''} ${userInfo.last_name || ''}`.trim() || '-'}</td>
-                    <td>{userInfo.email}</td>
-                    <td>
-                      <span className={`dept ${empInfo.departamento?.toLowerCase() || ''}`}>
-                        {empInfo.departamento || '-'}
-                      </span>
-                    </td>
-                    <td>{empInfo.salario ? `$${empInfo.salario}` : '-'}</td>
-                    <td>
-                      <span className={`badge ${empInfo.es_supervisor ? 'supervisor' : 'regular'}`}>
-                        {empInfo.es_supervisor ? 'Sí' : 'No'}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`badge ${empInfo.puede_aprobar_creditos ? 'approver' : 'non-approver'}`}>
-                        {empInfo.puede_aprobar_creditos ? 'Sí' : 'No'}
-                      </span>
-                    </td>
-                    <td>{empInfo.limite_aprobacion ? `$${empInfo.limite_aprobacion}` : '-'}</td>
-                    <td>
-                      <span className={`status ${userInfo.is_active ? 'active' : 'inactive'}`}>
-                        {userInfo.is_active ? 'Activo' : 'Inactivo'}
-                      </span>
-                    </td>
+                  <tr key={u.id}>
+                    <td>{ei.codigo_empleado || '—'}</td>
+                    <td>{ui.username}</td>
+                    <td>{`${ui.first_name || ''} ${ui.last_name || ''}`.trim() || '—'}</td>
+                    <td>{ui.email}</td>
+                    <td>{ei.departamento || '—'}</td>
+                    <td>{ei.salario ?? '—'}</td>
+                    <td>{ei.es_supervisor ? 'Sí' : 'No'}</td>
+                    <td>{ei.puede_aprobar_creditos ? 'Sí' : 'No'}</td>
+                    <td>{ei.limite_aprobacion ?? '—'}</td>
+                    <td>{ui.is_active ? 'Activo' : 'Inactivo'}</td>
                   </tr>
                 );
               })}
@@ -169,6 +140,4 @@ const EmployeeManagement = () => {
       </div>
     </div>
   );
-};
-
-export default EmployeeManagement;
+}

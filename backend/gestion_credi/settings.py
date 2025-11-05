@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 import environ
+import pytesseract
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,18 +24,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-c(80dp8yws%guopldo31@kr%ycn)^=*v8q4@jy+qayox@exu=s'
-
+if os.name == 'nt':  # Windows
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Inicializar environ
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 # Cargar el archivo .env (subimos un nivel porque settings.py está en backend/gestion_credi)
 environ.Env.read_env(os.path.join(BASE_DIR, '..', '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+#ALLOWED_HOSTS = ["192.168.0.200", "localhost", "127.0.0.1",]
+ALLOWED_HOSTS = ['*']  # solo para desarrollo
 
 # Application definition
 
@@ -48,6 +53,7 @@ INSTALLED_APPS = [
     'corsheaders',
     "django_extensions",
     'api',
+    'bitacora',
 ]
 
 MIDDLEWARE = [
@@ -59,12 +65,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    "bitacora.middleware.AuditLogMiddleware", #si van a añadir algo despues de aqui, por fa dejen a bitacora al final, asi como esta.
+
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True # solo para desarrollo
 # Configuración de CORS
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React
+    "http://127.0.0.1:3000",
     "http://localhost:8000",  # Django
+    "http://localhost:65453"  # Flutter  
 ]
 
 REST_FRAMEWORK = {
@@ -72,6 +85,12 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    # para bitacora
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
@@ -120,6 +139,9 @@ DATABASES = {
     }
 }
 
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY', default='pk_test_...')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='sk_test_...')
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='')  
 
 
 # Password validation
@@ -162,3 +184,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#documentos adjuntos
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'  

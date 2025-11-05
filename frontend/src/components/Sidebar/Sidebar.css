@@ -1,0 +1,145 @@
+/* =========================
+   Variables de color/estética del sidebar
+   ========================= */
+:root {
+  --sidebar-bg: #1f2b37;
+  --sidebar-bg-hover: #243242;
+  --sidebar-text: #e7edf3;
+  --sidebar-text-muted: #b7c3cf;
+  --sidebar-accent: #20c997;  /* verde menta */
+  --danger: #e55353;
+  --border: #2b3a4a;
+  --shadow: 0 10px 30px rgba(0,0,0,0.15);
+
+  /* ⏱️ Reusar el timing global para coordinar con el header */
+  --sidebar-dur: 240ms;
+  --sidebar-ease: ease;
+}
+
+/* =========================
+   Sidebar base (fixed a la izquierda)
+   ========================= */
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 240px;                         /* expandido */
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  /* 🎯 Transiciones coordinadas con el header */
+  transition:
+    width     var(--sidebar-dur) var(--sidebar-ease),
+    transform var(--sidebar-dur) var(--sidebar-ease);
+  will-change: width, transform;
+
+  z-index: 1000;
+}
+
+/* Estado colapsado (iconos) */
+.sidebar.collapsed { width: 64px; }
+
+/* =========================
+   Encabezado del sidebar (toggle + marca)
+   ========================= */
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar__brand {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.sidebar__toggle {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--sidebar-text);
+  font-size: 20px;
+  cursor: pointer;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+}
+.sidebar__toggle:hover { background: var(--sidebar-bg-hover); }
+
+/* =========================
+   Navegación (lista de links)
+   ========================= */
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background .15s ease, color .15s ease;
+}
+.sidebar__link:hover { background: var(--sidebar-bg-hover); }
+
+.sidebar__link.active {
+  background: rgba(32, 201, 151, 0.15);
+  color: var(--sidebar-accent);
+}
+
+.sidebar__link--danger.active,
+.sidebar__link--danger:hover {
+  background: rgba(229,83,83,0.15);
+  color: var(--danger);
+}
+
+.sidebar__icon {
+  width: 24px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 18px;
+}
+
+/* =========================
+   Pie del sidebar
+   ========================= */
+.sidebar__footer {
+  margin-top: auto;
+  padding: 12px;
+  color: var(--sidebar-text-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* =========================
+   Modo colapsado:
+   — centrar iconos y ocultar textos
+   ========================= */
+.sidebar.collapsed .sidebar__link { justify-content: center; }
+.sidebar.collapsed .sidebar__link > span:not(.sidebar__icon) { display: none; }
+
+/* =========================
+   Responsive:
+   — si en móvil usas el sidebar como “drawer”, este CSS
+     ya está listo para que lo animes con transform desde JS/CSS.
+   ========================= */
+/* @media (max-width: 900px) {
+  .sidebar {
+    /* si quisieras modo drawer, parte oculto a la izquierda: */
+    /* transform: translateX(-100%); */
+    /* y al abrir (quitar .collapsed) -> transform: translateX(0); */
+/*
+}
+  
+} 
+*/
